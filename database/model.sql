@@ -32,8 +32,8 @@ FROM license_file WHERE account_id IS NULL GROUP BY party_id ORDER BY count DESC
 p.id = a.party_id;
 
 -- Top 3 account users (needs first_name, last_name, account_number, count)
-SELECT p.first_name, p.last_name, b.account_number, a.count
+SELECT p.first_name, p.last_name, a.account_number, b.count
 FROM party p JOIN
 (SELECT party_id, account_id, COUNT(*) AS count
-FROM license_file WHERE account_id IS NOT NULL GROUP BY party_id ORDER BY count DESC LIMIT 3) a ON
-p.id = a.party_id JOIN (SELECT account_number, id FROM account) b ON a.account_id = b.id;
+FROM license_file WHERE account_id IS NOT NULL GROUP BY party_id ORDER BY count DESC LIMIT 3) b ON
+p.id = b.party_id LEFT JOIN account a ON b.account_id = a.id;
