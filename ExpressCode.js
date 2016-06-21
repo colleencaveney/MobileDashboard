@@ -4,7 +4,7 @@
 var express = require('express');
 var app = express();
 
-var mysql = require('node-mysql')
+var mysql = require('node-mysql');
 var connection = mysql.createConnection({
     host : 'localhost',
     user : 'across_xilinx',
@@ -22,7 +22,7 @@ connection.connect(function(err) {
 
 app.get('/', function (req, res) {
     res.send('Hello World');
-})
+});
 
 var server = app.listen(8081, function() {
     console.log('Server started');
