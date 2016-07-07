@@ -11,7 +11,7 @@ var evalUserLicenseCountSQL = "SELECT lf.account_id, COUNT(*) AS count FROM lice
 var licenseCount24HoursSQL = "SELECT lf.id, p.first_name, p.last_name FROM license_file lf, party p WHERE lf.party_id = p.id AND lf.created BETWEEN DATE_SUB('2016-06-01 00:00:00', INTERVAL '00 24' DAY_HOUR) AND '2016-06-01 00:00:00'";
 
 function getLicenseCount24Hours(dbs, dataRange, cb) {
-    log.debug("licenseService.js - getLicenseData()");
+    //log.debug("licenseService.js - getLicenseData()");
 
     dbs.connection.query(licenseCount24HoursSQL,[dataRange], function (err, rows) {
             if (err) return cb(err);
@@ -20,14 +20,14 @@ function getLicenseCount24Hours(dbs, dataRange, cb) {
                 jsondata.push({id:rows[i].id, first_name:rows[i].first_name, last_name:rows[i].last_name});
             }
 
-            log.debug("licenseService.js - getLicenseData() finished " + jsondata);
+            //log.debug("licenseService.js - getLicenseData() finished " + jsondata);
             cb(null, jsondata);
         }
     );
 }
 
 function getTop3AccountUsers(dbs, dataRange, cb) {
-    log.debug("licenseService.js - getLicenseData()");
+   // log.debug("licenseService.js - getLicenseData()");
 
     dbs.connection.query(top3AccountUsersSQL,[dataRange], function (err, rows) {
             if (err) return cb(err);
@@ -36,14 +36,14 @@ function getTop3AccountUsers(dbs, dataRange, cb) {
                 jsondata.push({first_name:rows[i].first_name, last_name:rows[i].last_name, account_number:rows[i].account_number, count:rows[i].count});
             }
 
-            log.debug("licenseService.js - getLicenseData() finished " + jsondata);
+           // log.debug("licenseService.js - getLicenseData() finished " + jsondata);
             cb(null, jsondata);
         }
     );
 }
 
 function getTop3EvalUsers(dbs, datarange, cb) {
-    log.debug("licenseService.js - getLicenseData()");
+   // log.debug("licenseService.js - getLicenseData()");
     
     dbs.connection.query(top3EvalUsersSQL, [dataRange], function (err, rows) {
         if (err) return cb(err);
@@ -52,59 +52,59 @@ function getTop3EvalUsers(dbs, datarange, cb) {
             jsondata.push({first_name:rows[i].first_name, last_name:rows[i].last_name, account_number:rows[i].account_number, count:rows[i].count});
         }
         
-        log.debug("licenseService.js - getLicenseData()");
+        //log.debug("licenseService.js - getLicenseData()");
         cb(null, jsondata);
         }
     );
 }
 
 function getAccountUserLicenseCount(dbs, datarange, cb) {
-    log.debug("licenseService.js - getLicenseData()");
+   // log.debug("licenseService.js - getLicenseData()");
 
     dbs.connection.query(accountUserLicenseCountSQL, [dataRange], function(err, rows) {
             if (err) return cb(err);
             var jsondata = [];
             jsondata.push(count = rows[0].count);
-            log.debug("licenseService.js - getLicenseData()");
+           // log.debug("licenseService.js - getLicenseData()");
             cb(null, jsondata);
         }
     );
 }
 
 function getEvalUserLicenseCount(dbs, datarange, cb) {
-    log.debug("licenseService.js - getLicenseData()");
+    //log.debug("licenseService.js - getLicenseData()");
 
     dbs.connection.query(evalUserLicenseCountSQL, [dataRange], function(err, rows) {
             if (err) return cb(err);
             var jsondata = [];
             jsondata.push(count = rows[0].count);
-            log.debug("licenseService.js - getLicenseData()");
+           // log.debug("licenseService.js - getLicenseData()");
             cb(null, jsondata);
         }
     );
 }
 
 function getUniqueAccountUserLicenseCount(dbs, datarange, cb) {
-    log.debug("licenseService.js - getLicenseData()");
+    //log.debug("licenseService.js - getLicenseData()");
 
     dbs.connection.query(uniqueAccountUserLicenseCountSQL, [dataRange], function(err, rows) {
             if (err) return cb(err);
             var jsondata = [];
             jsondata.push(count = rows[0].count);
-            log.debug("licenseService.js - getLicenseData()");
+            //log.debug("licenseService.js - getLicenseData()");
             cb(null, jsondata);
         }
     );
 }
 
 function getUniqueEvalUserLicenseCount(dbs, datarange, cb) {
-    log.debug("licenseService.js - getLicenseData()");
+    //log.debug("licenseService.js - getLicenseData()");
     
     dbs.connection.query(uniqueEvalUserLicenseCountSQL, [dataRange], function(err, rows) {
         if (err) return cb(err);
         var jsondata = [];
         jsondata.push(count = rows[0].count);
-        log.debug("licenseService.js - getLicenseData()");
+        //log.debug("licenseService.js - getLicenseData()");
         cb(null, jsondata);
         }
     );

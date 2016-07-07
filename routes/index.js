@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
-var licenseService = require("../service/licenseService");
+//var licenseService = require('/service/licenseService.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Dashboard' });
 });
+
 
 function resultHandler(res, next) {
   return function (err, result) {
@@ -36,6 +37,7 @@ router.get('UAUserLCount', function (req, res, next) {
 router.get('/UEUserLCount', function (req, res, next) {
   licenseService.getUniqueEvalUserLicenseCount(req.dbs, req.query.dataRange, resultHandler(res, next));
 });
+
 
 
 module.exports = router;
