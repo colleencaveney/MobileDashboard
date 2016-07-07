@@ -10,6 +10,19 @@ var accountUserLicenseCountSQL = "SELECT COUNT(lf.account_id) AS count FROM lice
 var evalUserLicenseCountSQL = "SELECT lf.account_id, COUNT(*) AS count FROM license_file lf WHERE lf.account_id IS NULL;";
 var licenseCount24HoursSQL = "SELECT lf.id, p.first_name, p.last_name FROM license_file lf, party p WHERE lf.party_id = p.id AND lf.created BETWEEN DATE_SUB('2016-06-01 00:00:00', INTERVAL '00 24' DAY_HOUR) AND '2016-06-01 00:00:00'";
 
+function getLicenseData(dbs, dataRange, cb) {
+  getAccountUserLicenseCount(dbs, dataRange, function (err, licenseCount) {
+    if (err) return cb(err);
+    console.log("data", licenseCount);
+
+    getTop3AccountUsers(dbs, dataRange, function (err, topActUser) {
+      if (err) return cb(err);
+
+      cb(null, {licenseCount: licenseCount[0], topAccountUser: topActUser});
+    })
+  })
+}
+
 function getLicenseCount24Hours(dbs, dataRange, cb) {
     //log.debug("licenseService.js - getLicenseData()");
 
@@ -58,7 +71,7 @@ function getTop3EvalUsers(dbs, datarange, cb) {
     );
 }
 
-function getAccountUserLicenseCount(dbs, datarange, cb) {
+function getAccountUserLicenseCount(dbs, dataRange, cb) {
    // log.debug("licenseService.js - getLicenseData()");
 
     dbs.connection.query(accountUserLicenseCountSQL, [dataRange], function(err, rows) {
@@ -117,3 +130,4 @@ exports.getAccountUserLicenseCount = getAccountUserLicenseCount;
 exports.getEvalUserLicenseCount = getEvalUserLicenseCount;
 exports.getUniqueAccountUserLicenseCount = getUniqueAccountUserLicenseCount;
 exports.getUniqueEvalUserLicenseCount = getUniqueEvalUserLicenseCount;
+exports.getLicenseData = getLicenseData;

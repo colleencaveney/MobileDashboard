@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
-//var licenseService = require('/service/licenseService.js');
+var licenseService = require('../service/licenseService.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Dashboard' });
+  licenseService.getLicenseData(req.dbs, req.query.dataRange, resultHandler(res, next));
 });
 
 
@@ -12,7 +12,7 @@ function resultHandler(res, next) {
   return function (err, result) {
     if (err) return next(err);
 
-    res.status(200).json(result);
+    res.render('index', { title: 'Dashboard', data: result});
   }
 }
 

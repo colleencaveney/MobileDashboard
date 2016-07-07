@@ -6,7 +6,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('./routes/index');
-var data = require('../service/licenseService');
+var data = require('./service/licenseService');
 
 
 var mysql = require('mysql');
@@ -30,17 +30,18 @@ function init(cb) {
     if (err) return cb(err, dbs);
     console.log("Database Connected");
     dbs.connection = connection;
-    
+    cb(null, dbs);
   });
 }
 
+var app = express();
+
 function startServer(err, dbs) {
+  console.log("start server");
   if (err) {
     if (dbs.connection) dbs.connection.end();
     return;
   }
-
-  var app = express();
 
   // view engine setup
   app.set('views', path.join(__dirname, 'views'));
@@ -62,8 +63,13 @@ function startServer(err, dbs) {
   app.use(cookieParser());
   app.use(express.static(path.join(__dirname, 'public')));
 
+  app.use(function(req, res, next) {
+    req.dbs = dbs;
+    next();
+  });
+
   app.use('/', routes);
-  app.use('/data', data);
+  //app.use('/data', data);
 
   // catch 404 and forward to error handler
   app.use(function(req, res, next) {
@@ -95,9 +101,6 @@ function startServer(err, dbs) {
       error: {}
     });
   });
-
-  app.listen(config.server.port);
-  log.info("server started at " + config.server.port);
 
 }
 
