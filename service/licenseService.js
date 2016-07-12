@@ -1,7 +1,7 @@
 /**
  * Created by colleencaveney on 7/5/16.
  */
-
+var async = require('async');
 var top3AccountUsersSQL = "SELECT p.first_name, p.last_name, a.account_number, b.count FROM party p JOIN (SELECT party_id, account_id, COUNT(*) AS count FROM license_file WHERE account_id IS NOT NULL GROUP BY party_id ORDER BY count DESC LIMIT 3) b ON p.id = b.party_id LEFT JOIN account a ON b.account_id = a.id";
 var top3EvalUsersSQL = "SELECT p.first_name, p.last_name, a.count FROM party p JOIN (SELECT party_id, COUNT(*) AS count FROM license_file WHERE account_id IS NULL GROUP BY party_id ORDER BY count DESC LIMIT 3) a ON p.id = a.party_id";
 var uniqueEvalUserLicenseCountSQL = "SELECT COUNT(DISTINCT(lf.party_id)) AS count FROM license_file lf WHERE lf.account_id IS NULL";
@@ -10,17 +10,33 @@ var accountUserLicenseCountSQL = "SELECT COUNT(lf.account_id) AS count FROM lice
 var evalUserLicenseCountSQL = "SELECT lf.account_id, COUNT(*) AS count FROM license_file lf WHERE lf.account_id IS NULL;";
 var licenseCount24HoursSQL = "SELECT lf.id, p.first_name, p.last_name FROM license_file lf, party p WHERE lf.party_id = p.id AND lf.created BETWEEN DATE_SUB('2016-06-01 00:00:00', INTERVAL '00 24' DAY_HOUR) AND '2016-06-01 00:00:00'";
 
+
 function getLicenseData(dbs, dataRange, cb) {
-  getAccountUserLicenseCount(dbs, dataRange, function (err, licenseCount) {
-    if (err) return cb(err);
-    console.log("data", licenseCount);
-
-    getTop3AccountUsers(dbs, dataRange, function (err, topActUser) {
-      if (err) return cb(err);
-
-      cb(null, {licenseCount: licenseCount[0], topAccountUser: topActUser});
-    })
-  })
+    async.series({
+        'Top 3 Account Users': function (callback) {
+            callback(null, getTop3AccountUsers(dbs, dataRange, cb));
+        },
+        'Top 3 Eval Users': function (callback) {
+            callback(null, getTop3EvalUsers(dbs, dataRange, cb));
+        },
+        'Unique Account User License Count': function (callback) {
+            callback(null, getUniqueAccountUserLicenseCount(dbs, dataRange, cb));
+        },
+        'Unique Eval User License Count': function (callback) {
+            callback(null, getUniqueEvalUserLicenseCount(dbs, dataRange, cb));
+        },
+        'Account User License Count': function (callback) {
+            callback(null, getAccountUserLicenseCount(dbs, dataRange, cb));
+        },
+        'Eval User License Count': function (callback) {
+            callback(null, getEvalUserLicenseCount(dbs, dataRange, cb));
+        },
+        'Past 24 Hours License Count': function (callback) {
+            callback(null, getLicenseCount24Hours(dbs, dataRange, cb));
+        }
+    }, function (err, results) {
+        console.log(results);
+    });
 }
 
 function getLicenseCount24Hours(dbs, dataRange, cb) {
@@ -55,7 +71,7 @@ function getTop3AccountUsers(dbs, dataRange, cb) {
     );
 }
 
-function getTop3EvalUsers(dbs, datarange, cb) {
+function getTop3EvalUsers(dbs, dataRange, cb) {
    // log.debug("licenseService.js - getLicenseData()");
     
     dbs.connection.query(top3EvalUsersSQL, [dataRange], function (err, rows) {
@@ -84,7 +100,7 @@ function getAccountUserLicenseCount(dbs, dataRange, cb) {
     );
 }
 
-function getEvalUserLicenseCount(dbs, datarange, cb) {
+function getEvalUserLicenseCount(dbs, dataRange, cb) {
     //log.debug("licenseService.js - getLicenseData()");
 
     dbs.connection.query(evalUserLicenseCountSQL, [dataRange], function(err, rows) {
@@ -97,7 +113,7 @@ function getEvalUserLicenseCount(dbs, datarange, cb) {
     );
 }
 
-function getUniqueAccountUserLicenseCount(dbs, datarange, cb) {
+function getUniqueAccountUserLicenseCount(dbs, dataRange, cb) {
     //log.debug("licenseService.js - getLicenseData()");
 
     dbs.connection.query(uniqueAccountUserLicenseCountSQL, [dataRange], function(err, rows) {
@@ -110,7 +126,7 @@ function getUniqueAccountUserLicenseCount(dbs, datarange, cb) {
     );
 }
 
-function getUniqueEvalUserLicenseCount(dbs, datarange, cb) {
+function getUniqueEvalUserLicenseCount(dbs, dataRange, cb) {
     //log.debug("licenseService.js - getLicenseData()");
     
     dbs.connection.query(uniqueEvalUserLicenseCountSQL, [dataRange], function(err, rows) {
