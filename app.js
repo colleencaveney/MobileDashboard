@@ -7,6 +7,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var data = require('./service/licenseService');
+//var jQuery = require('jquery');
+//var bootstrap = require('bootstrap');
+
 
 
 var mysql = require('mysql');
