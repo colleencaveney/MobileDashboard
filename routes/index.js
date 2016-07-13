@@ -6,6 +6,7 @@ var licenseService = require('../service/licenseService.js');
 function resultHandler(res, next) {
   return function (err, result) {
     if (err) return next(err);
+    console.log(result);
     res.render('index', { title: 'Dashboard', data: result});
   }
 }

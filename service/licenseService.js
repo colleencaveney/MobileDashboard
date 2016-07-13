@@ -7,35 +7,35 @@ var top3EvalUsersSQL = "SELECT p.first_name, p.last_name, a.count FROM party p J
 var uniqueEvalUserLicenseCountSQL = "SELECT COUNT(DISTINCT(lf.party_id)) AS count FROM license_file lf WHERE lf.account_id IS NULL";
 var uniqueAccountUserLicenseCountSQL = "SELECT COUNT(DISTINCT(lf.party_id)) AS count FROM license_file lf WHERE lf.account_id IS NOT NULL";
 var accountUserLicenseCountSQL = "SELECT COUNT(lf.account_id) AS count FROM license_file lf WHERE lf.account_id IS NOT NULL";
-var evalUserLicenseCountSQL = "SELECT lf.account_id, COUNT(*) AS count FROM license_file lf WHERE lf.account_id IS NULL;";
-var licenseCount24HoursSQL = "SELECT lf.id, p.first_name, p.last_name FROM license_file lf, party p WHERE lf.party_id = p.id AND lf.created BETWEEN DATE_SUB('2016-06-01 00:00:00', INTERVAL '00 24' DAY_HOUR) AND '2016-06-01 00:00:00'";
+var evalUserLicenseCountSQL = "SELECT lf.account_id, COUNT(*) AS count FROM license_file lf WHERE lf.account_id IS NULL";
+var licenseCount24HoursSQL = "SELECT COUNT(lf.id) AS count FROM license_file lf, party p WHERE lf.party_id = p.id AND lf.created BETWEEN DATE_SUB('2016-06-01 00:00:00', INTERVAL '00 24' DAY_HOUR) AND '2016-06-01 00:00:00'";
 
 
 function getLicenseData(dbs, dataRange, cb) {
     async.series({
-        'Top 3 Account Users': function (callback) {
-            callback(null, getTop3AccountUsers(dbs, dataRange, cb));
+        Past24HoursLicenseCount: function (callback) {
+            getLicenseCount24Hours(dbs, dataRange, callback);
         },
-        'Top 3 Eval Users': function (callback) {
-            callback(null, getTop3EvalUsers(dbs, dataRange, cb));
+        Top3AccountUsers: function (callback) {
+            getTop3AccountUsers(dbs, dataRange, callback);
         },
-        'Unique Account User License Count': function (callback) {
-            callback(null, getUniqueAccountUserLicenseCount(dbs, dataRange, cb));
+        Top3EvalUsers: function (callback) {
+            getTop3EvalUsers(dbs, dataRange, callback);
         },
-        'Unique Eval User License Count': function (callback) {
-            callback(null, getUniqueEvalUserLicenseCount(dbs, dataRange, cb));
+        AccountUserLicenseCount: function (callback) {
+            getAccountUserLicenseCount(dbs, dataRange, callback);
         },
-        'Account User License Count': function (callback) {
-            callback(null, getAccountUserLicenseCount(dbs, dataRange, cb));
+        EvalUserLicenseCount: function (callback) {
+            getEvalUserLicenseCount(dbs, dataRange, callback);
         },
-        'Eval User License Count': function (callback) {
-            callback(null, getEvalUserLicenseCount(dbs, dataRange, cb));
+        UniqueAccountUserLicenseCount: function (callback) {
+            getUniqueAccountUserLicenseCount(dbs, dataRange, callback);
         },
-        'Past 24 Hours License Count': function (callback) {
-            callback(null, getLicenseCount24Hours(dbs, dataRange, cb));
+        UniqueEvalUserLicenseCount: function (callback) {
+            getUniqueEvalUserLicenseCount(dbs, dataRange, callback);
         }
     }, function (err, results) {
-        console.log(results);
+        cb(null, results);
     });
 }
 
@@ -46,7 +46,7 @@ function getLicenseCount24Hours(dbs, dataRange, cb) {
             if (err) return cb(err);
             var jsondata = [];
             for(i = 0; i < rows.length; i++){
-                jsondata.push({id:rows[i].id, first_name:rows[i].first_name, last_name:rows[i].last_name});
+                jsondata.push(count = rows[0].count);
             }
 
             //log.debug("licenseService.js - getLicenseData() finished " + jsondata);
@@ -78,7 +78,7 @@ function getTop3EvalUsers(dbs, dataRange, cb) {
         if (err) return cb(err);
         var jsondata = [];
         for(i = 0; i<rows.length; i++){
-            jsondata.push({first_name:rows[i].first_name, last_name:rows[i].last_name, account_number:rows[i].account_number, count:rows[i].count});
+            jsondata.push({first_name:rows[i].first_name, last_name:rows[i].last_name, count:rows[i].count});
         }
         
         //log.debug("licenseService.js - getLicenseData()");
