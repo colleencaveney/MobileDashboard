@@ -8,7 +8,7 @@ var uniqueEvalUserLicenseCountSQL = "SELECT COUNT(DISTINCT(lf.party_id)) AS coun
 var uniqueAccountUserLicenseCountSQL = "SELECT COUNT(DISTINCT(lf.party_id)) AS count FROM license_file lf WHERE lf.account_id IS NOT NULL";
 var accountUserLicenseCountSQL = "SELECT COUNT(lf.account_id) AS count FROM license_file lf WHERE lf.account_id IS NOT NULL";
 var evalUserLicenseCountSQL = "SELECT lf.account_id, COUNT(*) AS count FROM license_file lf WHERE lf.account_id IS NULL";
-var licenseCount24HoursSQL = "SELECT COUNT(lf.id) AS count FROM license_file lf, party p WHERE lf.party_id = p.id AND lf.created BETWEEN DATE_SUB('2016-06-01 00:00:00', INTERVAL '00 24' DAY_HOUR) AND '2016-06-01 00:00:00'";
+var licenseCount24HoursSQL = "SELECT COUNT(lf.id) AS count FROM license_file lf WHERE lf.created BETWEEN DATE_SUB('2016-06-01 00:00:00', INTERVAL '00 24' DAY_HOUR) AND '2016-06-01 00:00:00'";
 
 
 function getLicenseData(dbs, dataRange, cb) {
