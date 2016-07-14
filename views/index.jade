@@ -1,70 +1,79 @@
 extends layout
 block content
   head
-    h1= title
+    h1.header= title
   body
 
-    h3 Past 24 Hours License Count
-    p= data.Past24HoursLicenseCount[0]
-
-    h3 Account User License Count
-    p= data.AccountUserLicenseCount[0]
-
-    h3 Eval User License Count
-    p= data.EvalUserLicenseCount[0]
-
-    h3 Unique Account User License Count
-    p= data.UniqueAccountUserLicenseCount[0]
-
-    h3 Unique Eval User License Count
-    p= data.UniqueEvalUserLicenseCount[0]
-
-    h3 Top 3 Account Users
     .row
-      .col-md-6
-        table.table
-          thead
-            tr
-              th First Name
-              th Last Name
-              th Account
-              th Count
-          tbody
-            tr
-              td= data.Top3AccountUsers[0].first_name
-              td= data.Top3AccountUsers[0].last_name
-              td= data.Top3AccountUsers[0].account_number
-              td= data.Top3AccountUsers[0].count
-            tr
-              td= data.Top3AccountUsers[1].first_name
-              td= data.Top3AccountUsers[1].last_name
-              td= data.Top3AccountUsers[1].account_number
-              td= data.Top3AccountUsers[1].count
-            tr
-              td= data.Top3AccountUsers[2].first_name
-              td= data.Top3AccountUsers[2].last_name
-              td= data.Top3AccountUsers[2].account_number
-              td= data.Top3AccountUsers[2].count
-
-    h3 Top 3 Eval Users
-    .row
-      .col-md-6
-        table.table
-          thead
-            tr
-              th First Name
-              th Last Name
-              th Count
-          tbody
-            tr
-              td= data.Top3EvalUsers[0].first_name
-              td= data.Top3EvalUsers[0].last_name
-              td= data.Top3EvalUsers[0].count
-            tr
-              td= data.Top3EvalUsers[1].first_name
-              td= data.Top3EvalUsers[1].last_name
-              td= data.Top3EvalUsers[1].count
-            tr
-              td= data.Top3EvalUsers[2].first_name
-              td= data.Top3EvalUsers[2].last_name
-              td= data.Top3EvalUsers[2].count
+      .col-sm-4
+        .panel.panel-primary
+          .panel-heading
+            h3.panel-title License Count for Past 24 Hours
+          .panel-body= data.Past24HoursLicenseCount[0]
+        .panel.panel-primary
+          .panel-heading
+            h3.panel-title License Count for Account Users
+          .panel-body= data.AccountUserLicenseCount[0]
+        .panel.panel-primary
+          .panel-heading
+            h3.panel-title License Count for Evaluation Users
+          .panel-body= data.EvalUserLicenseCount[0]
+        .panel.panel-primary
+          .panel-heading
+            h3.panel-title License Count for Unique Account Users
+          .panel-body= data.UniqueAccountUserLicenseCount[0]
+        .panel.panel-primary
+          .panel-heading
+            h3.panel-title License Count for Unique Evaluation Users
+          .panel-body= data.UniqueEvalUserLicenseCount[0]
+      .col-sm-8
+        .panel.panel-primary
+          .panel-heading
+            h3.panel-title Top 3 Account Users
+          .panel-body
+            table.table
+              thead
+                tr
+                  th First Name
+                  th Last Name
+                  th Account
+                  th License Count
+              tbody
+                tr
+                  td= data.Top3AccountUsers[0].first_name
+                  td= data.Top3AccountUsers[0].last_name
+                  td= data.Top3AccountUsers[0].account_number
+                  td= data.Top3AccountUsers[0].count
+                tr
+                  td= data.Top3AccountUsers[1].first_name
+                  td= data.Top3AccountUsers[1].last_name
+                  td= data.Top3AccountUsers[1].account_number
+                  td= data.Top3AccountUsers[1].count
+                tr
+                  td= data.Top3AccountUsers[2].first_name
+                  td= data.Top3AccountUsers[2].last_name
+                  td= data.Top3AccountUsers[2].account_number
+                  td= data.Top3AccountUsers[2].count
+        .panel.panel-primary
+          .panel-heading
+            h3.panel-title Top 3 Evaluation Users
+          .panel-body
+            table.table
+              thead
+                tr
+                  th First Name
+                  th Last Name
+                  th License Count
+              tbody
+                tr
+                  td= data.Top3EvalUsers[0].first_name
+                  td= data.Top3EvalUsers[0].last_name
+                  td= data.Top3EvalUsers[0].count
+                tr
+                  td= data.Top3EvalUsers[1].first_name
+                  td= data.Top3EvalUsers[1].last_name
+                  td= data.Top3EvalUsers[1].count
+                tr
+                  td= data.Top3EvalUsers[2].first_name
+                  td= data.Top3EvalUsers[2].last_name
+                  td= data.Top3EvalUsers[2].count

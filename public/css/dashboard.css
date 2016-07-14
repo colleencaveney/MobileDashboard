@@ -13,6 +13,10 @@ body {
  * Global add-ons
  */
 
+.header {
+    padding-bottom: 15px;
+}
+
 .sub-header {
     padding-bottom: 10px;
     border-bottom: 1px solid #eee;
