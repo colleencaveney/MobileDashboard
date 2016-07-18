@@ -8,11 +8,25 @@ var uniqueEvalUserLicenseCountSQL = "SELECT COUNT(DISTINCT(lf.party_id)) AS coun
 var uniqueAccountUserLicenseCountSQL = "SELECT COUNT(DISTINCT(lf.party_id)) AS count FROM license_file lf WHERE lf.account_id IS NOT NULL";
 var accountUserLicenseCountSQL = "SELECT COUNT(lf.account_id) AS count FROM license_file lf WHERE lf.account_id IS NOT NULL";
 var evalUserLicenseCountSQL = "SELECT lf.account_id, COUNT(*) AS count FROM license_file lf WHERE lf.account_id IS NULL";
-var licenseCount24HoursSQL = "SELECT COUNT(lf.id) AS count FROM license_file lf WHERE lf.created BETWEEN DATE_SUB('2016-06-01 00:00:00', INTERVAL '00 24' DAY_HOUR) AND '2016-06-01 00:00:00'";
+var licenseCount24HoursSQL = "SELECT COUNT(lf.id) AS count FROM license_file lf WHERE lf.id > ? AND lf.created > DATE_SUB(NOW(), INTERVAL 24 HOUR)";
+var maxLicenseFileId = "SELECT MAX(id) maxId FROM license_file";
 
+var MAX_AVERAGE_LICENSES = 2000;    // based on historical data, maximum one day new license files is around 1200, use 2000 to be safe.
+                                    // This is to speed i[ the last 24 hours license count SQL
+
+var start;
+
+function timeIt(name) {
+  console.log(name, Date.now() - start);
+  start = Date.now();
+}
 
 function getLicenseData(dbs, dataRange, cb) {
+    start = Date.now();
     async.series({
+        MaxLicenseFileId: function (callback) {
+            getMaxLicenseFileId(dbs, callback);
+        },
         Past24HoursLicenseCount: function (callback) {
             getLicenseCount24Hours(dbs, dataRange, callback);
         },
@@ -39,17 +53,25 @@ function getLicenseData(dbs, dataRange, cb) {
     });
 }
 
+function getMaxLicenseFileId(dbs, cb) {
+  dbs.connection.query(maxLicenseFileId, function (err, rows) {
+      if (err) return cb(err);
+      console.log("MAX license file id", rows[0].maxId);
+      dbs.maxLicenseFileId = rows[0].maxId;
+      cb(null, dbs.maxLicenseFileId);
+  });
+}
+
 function getLicenseCount24Hours(dbs, dataRange, cb) {
     //log.debug("licenseService.js - getLicenseData()");
-
-    dbs.connection.query(licenseCount24HoursSQL,[dataRange], function (err, rows) {
+    dbs.connection.query(licenseCount24HoursSQL,[dbs.maxLicenseFileId - MAX_AVERAGE_LICENSES], function (err, rows) {
             if (err) return cb(err);
             var jsondata = [];
             for(i = 0; i < rows.length; i++){
                 jsondata.push(count = rows[0].count);
             }
 
-            //log.debug("licenseService.js - getLicenseData() finished " + jsondata);
+            timeIt("getLicenseCount24Hours");
             cb(null, jsondata);
         }
     );
@@ -66,6 +88,7 @@ function getTop3AccountUsers(dbs, dataRange, cb) {
             }
 
            // log.debug("licenseService.js - getLicenseData() finished " + jsondata);
+            timeIt("getTop3AccountUsers");
             cb(null, jsondata);
         }
     );
@@ -82,6 +105,7 @@ function getTop3EvalUsers(dbs, dataRange, cb) {
         }
         
         //log.debug("licenseService.js - getLicenseData()");
+        timeIt("getTop3EvalUsers");
         cb(null, jsondata);
         }
     );
@@ -95,6 +119,7 @@ function getAccountUserLicenseCount(dbs, dataRange, cb) {
             var jsondata = [];
             jsondata.push(count = rows[0].count);
            // log.debug("licenseService.js - getLicenseData()");
+            timeIt("getAccountUserLicenseCount");
             cb(null, jsondata);
         }
     );
@@ -108,6 +133,7 @@ function getEvalUserLicenseCount(dbs, dataRange, cb) {
             var jsondata = [];
             jsondata.push(count = rows[0].count);
            // log.debug("licenseService.js - getLicenseData()");
+            timeIt("getEvalUserLicenseCount");
             cb(null, jsondata);
         }
     );
@@ -121,6 +147,7 @@ function getUniqueAccountUserLicenseCount(dbs, dataRange, cb) {
             var jsondata = [];
             jsondata.push(count = rows[0].count);
             //log.debug("licenseService.js - getLicenseData()");
+            timeIt("getUniqueAccountUserLicenseCount");
             cb(null, jsondata);
         }
     );
@@ -134,6 +161,7 @@ function getUniqueEvalUserLicenseCount(dbs, dataRange, cb) {
         var jsondata = [];
         jsondata.push(count = rows[0].count);
         //log.debug("licenseService.js - getLicenseData()");
+        timeIt("getUniqueEvalUserLicenseCount");
         cb(null, jsondata);
         }
     );
