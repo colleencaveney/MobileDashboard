@@ -1,0 +1,16 @@
+{
+  "name": "AwesomeProject",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start"
+  },
+  "dependencies": {
+    "native-base": "^0.5.0",
+    "react": "15.2.1",
+    "react-native": "0.29.2",
+    "react-native-chart": "^1.0.8-beta",
+    "react-native-item-cell": "^1.4.0",
+    "react-native-listitem": "^1.0.5"
+  }
+}
