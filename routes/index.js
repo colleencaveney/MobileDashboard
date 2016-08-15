@@ -11,6 +11,14 @@ function resultHandler(res, next) {
   }
 }
 
+router.get('/api/Dashboard', function(req, res, next) {
+  licenseService.getLicenseData(req.dbs, req.query, function(err, result) {
+    if (err) return next(err);
+    res.send(result);
+    }
+  )
+});
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   licenseService.getLicenseData(req.dbs, req.query, resultHandler(res, next));
