@@ -23,7 +23,7 @@ class AwesomeProject extends Component {
     super(props);
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {Top3AUsers: ds.cloneWithRows([]), Top3EUsers: ds.cloneWithRows([])};
-    fetch('http://localhost:3000/api/dashboard')
+    fetch('https://xilinx-stage.entitlenow.com/mobiledashboard/api/dashboard')
       .then((response) => response.json())
       .then((responseJson) => {
       this.setState(
