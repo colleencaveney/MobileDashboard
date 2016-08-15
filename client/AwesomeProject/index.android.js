@@ -144,27 +144,20 @@
    },
    header1: {
      fontSize: 30,
-     paddingTop: 20,
      textAlign: 'left',
    },
    header2: {
      fontSize: 20,
-     paddingBottom: 5,
      textAlign: 'left',
-   },
-   countsData: {
-     flex: 1,
    },
    count: {
      fontSize: 50,
-     paddingTop: 40,
+     paddingTop: 10,
      paddingRight: 10,
-     marginBottom: 20,
+     marginBottom: 10,
      textAlign: 'right',
-     borderWidth: 1,
    },
    chartContainer: {
-     flex: 1,
      justifyContent: 'center',
      alignItems: 'flex-start',
      backgroundColor: 'white',

@@ -101,7 +101,7 @@ class AwesomeProject extends Component {
                   <Text style={styles.name}>{rowData.first_name} {rowData.last_name}</Text>
                   <Text style={styles.accountNumber}>{rowData.account_number}</Text>
                   <View style={{flex: 1, flexDirection: 'row'}}>
-                    <View style={{width: rowData.count/5, borderRadius: 10, height: 10, backgroundColor: '#FF3838', marginTop: 20}}/>
+                    <View style={{width: rowData.count/8, borderRadius: 10, height: 10, backgroundColor: '#FF3838', marginTop: 20}}/>
                     <Text style={styles.count2}>{rowData.count}</Text>
                   </View>
                 </View>
@@ -115,7 +115,7 @@ class AwesomeProject extends Component {
                 <View style={styles.listData}>
                   <Text style={styles.name}>{rowData.first_name} {rowData.last_name}</Text>
                   <View style={{flex: 1, flexDirection: 'row'}}>
-                    <View style={{width: rowData.count, borderRadius: 10, height: 10, backgroundColor: '#FF3838', marginTop: 20}}/>
+                    <View style={{width: rowData.count/2, borderRadius: 10, height: 10, backgroundColor: '#FF3838', marginTop: 20}}/>
                     <Text style={styles.count2}>{rowData.count}</Text>
                   </View>
                 </View>
@@ -143,12 +143,12 @@ const styles = StyleSheet.create({
     paddingTop: 40,
   },
   header1: {
-    fontSize: 30,
+    fontSize: 25,
     paddingTop: 20,
     textAlign: 'left',
   },
   header2: {
-    fontSize: 20,
+    fontSize: 18,
     paddingBottom: 5,
     textAlign: 'left',
   },
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   name: {
-    fontSize: 25,
+    fontSize: 22,
     paddingTop: 10,
   },
   accountNumber: {
@@ -193,6 +193,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     textAlign: 'right',
     paddingTop: 20,
+    paddingBottom: 10,
     flex: 1,
   },
 });
