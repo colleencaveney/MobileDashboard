@@ -1,4 +1,4 @@
-# MobileDashboard (https://jira.entitlenow.com:8443/browse/ACROSS-1183)
+# MobileDashboard 
 Summer internship project 2016
 
 ## Objective
