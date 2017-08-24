@@ -1,10 +1,10 @@
 module.exports = {
     datasource: {
         host: 'localhost',
-        user: 'across_xilinx',
+        user: 'test',
         port: '3320',
         password: 'xxxxxxx',
-        database: 'across_xilinx',
+        database: 'test',
         connectionLimit: 5,
     }
 };
